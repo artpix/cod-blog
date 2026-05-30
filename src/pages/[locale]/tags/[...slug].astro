@@ -5,6 +5,16 @@ import {getPostsByTag, getTags} from "../../../lib/api";
 import { rewriteLegacyCmsHtml } from "../../../lib/rewriteLegacyCmsHtml";
 import { getLangFromUrl } from '../../../i18n/utils';
 import { defaultLang } from "../../../i18n/ui";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const tags = await getTags();
+    return tags
+        .filter((tag) => tag.lang !== 'ru')
+        .map((tag) => ({ params: { locale: tag.lang, slug: tag.slug } }));
+}
+
 const lang = getLangFromUrl(Astro.url) || defaultLang;
 
 const tagSlug = Astro.params.slug;

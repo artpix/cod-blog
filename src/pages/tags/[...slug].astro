@@ -4,6 +4,15 @@ import CardPost from "../../components/CardPost.astro";
 import {getPostsByTag, getTags} from "../../lib/api";
 import { rewriteLegacyCmsHtml } from "../../lib/rewriteLegacyCmsHtml";
 
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const tags = await getTags();
+    return tags
+        .filter((tag) => tag.lang === 'ru')
+        .map((tag) => ({ params: { slug: tag.slug } }));
+}
+
 const tagSlug = Astro.params.slug;
 const tag = (await getTags())?.find(({ slug }) =>  slug === tagSlug);
 const posts = await getPostsByTag(tagSlug);

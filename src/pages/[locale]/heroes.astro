@@ -7,6 +7,12 @@ import { getAssetURL } from "../../lib/directus";
 import { getLangFromUrl } from '../../i18n/utils';
 import { defaultLang } from "../../i18n/ui";
 import seoData from '../../i18n/pages/heroes.json';
+import { getNonDefaultLocalePaths } from "../../lib/locale-paths";
+
+export const prerender = true;
+export async function getStaticPaths() {
+    return getNonDefaultLocalePaths();
+}
 
 const lang = getLangFromUrl(Astro.url) || defaultLang;
 const allHeroes = await getHeroes(lang);

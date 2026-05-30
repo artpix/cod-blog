@@ -6,9 +6,14 @@ import { getPosts, getTags } from "../../lib/api";
 import { getAssetURL } from "../../lib/directus";
 import { getSiteCopy } from "../../i18n/site";
 import { getLangFromUrl } from '../../i18n/utils';
+import { getNonDefaultLocalePaths } from "../../lib/locale-paths";
+
+export const prerender = true;
+export async function getStaticPaths() {
+    return getNonDefaultLocalePaths();
+}
 
 const lang = getLangFromUrl(Astro.url);
-export const prerender = false;
 
 const tags = (await getTags()).filter(tag => tag.lang === lang);
 const copy = getSiteCopy(lang);

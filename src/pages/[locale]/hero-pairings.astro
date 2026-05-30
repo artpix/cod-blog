@@ -6,9 +6,14 @@ import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { defaultLang } from "../../i18n/ui";
 const lang = getLangFromUrl(Astro.url) || defaultLang;
 import seoData from '../../i18n/pages/hero-pairings.json';
+import { getNonDefaultLocalePaths } from "../../lib/locale-paths";
+
+export const prerender = true;
+export async function getStaticPaths() {
+    return getNonDefaultLocalePaths();
+}
 
 const heroPairings = await getHeroPairings();
-export const prerender = false;
 const copy = seoData[lang] ?? seoData['ru'];
 const t = useTranslations(lang);
 ---

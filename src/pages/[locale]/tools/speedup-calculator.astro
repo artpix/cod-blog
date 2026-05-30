@@ -3,6 +3,12 @@ import PageLayout from "../../../layouts/PageLayout.astro";
 import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
 import { defaultLang } from "../../../i18n/ui";
 import {getSiteCopy} from "../../../i18n/site";
+import { getNonDefaultLocalePaths } from "../../../lib/locale-paths";
+
+export const prerender = true;
+export async function getStaticPaths() {
+    return getNonDefaultLocalePaths();
+}
 
 const lang = getLangFromUrl(Astro.url) || defaultLang;
 const copy = getSiteCopy(lang);

@@ -1,15 +1,13 @@
 // astro.config.mjs
 import {defineConfig} from "astro/config";
 import tailwind from '@astrojs/tailwind';
-import netlify from '@astrojs/netlify';
 import * as path from "node:path";
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 
 export default defineConfig({
     site: 'https://callofdragons.netlify.app',
-    output: 'server',
-    adapter: netlify(),
+    output: 'static',
     viewTransitions: true,
     integrations: [sitemap({
         filter: (page) =>
