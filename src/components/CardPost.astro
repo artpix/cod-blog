@@ -1,0 +1,32 @@
+---
+import {getAssetURL} from "../lib/directus";
+import FormattedDate from "./FormattedDate.astro";
+
+const { id, lang, slug, image, title, date_created, tags = false} = Astro.props;
+const hrefForPost = lang === 'ru' || lang === undefined ? `/blog/${slug}/` : `/${lang}/blog/${slug}/`;
+---
+<li key={id} class="card card-container bg-primary rounded-lg">
+    <article class="card-post">
+        <a href={hrefForPost} class="card-link">
+            <div class="card-thumbnail lg:min-h-48 md:max-h-28 sm:max-h-36">
+                <img class="lg:min-h-48 md:max-h-28 sm:max-h-36 min-w-full" src={getAssetURL(image)} alt={title} />
+            </div>
+            <div class="date">
+                <!-- Можно вставить форматированную дату здесь -->
+                <span><FormattedDate date={date_created} /></span>
+            </div>
+            <h4 class="title">
+                {title}
+            </h4>
+        </a>
+        {tags?.length > 0 && (
+            <ul class="post-tags">
+                {tags?.map(tag => {
+                    return (
+                            <a class={`post-tag-item tag-item-${tag.tags_id.color}`} href={lang === 'ru' ? `/tags/${tag.tags_id.slug}/` : `/${lang}/tags/${tag.tags_id.slug}/`}><span>#</span>{tag.tags_id.name.toLowerCase()}</a>
+                    )
+                })}
+            </ul>
+        )}
+    </article>
+</li>

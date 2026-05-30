@@ -1,0 +1,86 @@
+---
+import PageLayout from "../../../layouts/PageLayout.astro";
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+import { defaultLang } from "../../../i18n/ui";
+import {getSiteCopy} from "../../../i18n/site";
+const lang = getLangFromUrl(Astro.url) || defaultLang;
+const copy = getSiteCopy(lang);
+const t = useTranslations(lang);
+---
+<PageLayout title={t('points-calculator.title')} description={copy.description}>
+    <!-- Калькулятор очков -->
+    <section id="points-calculator" class="calculator">
+        <div class="title mb-8">
+            <h1>{t('points-calculator.title')}</h1>
+            <p class="text-[#6B7280] text-sm">{t('points-calculator.desc')}</p>
+        </div>
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-3">
+            <div>
+                <input id="points" class="field-item w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="text" placeholder={t('points-calculator.f1')} autocomplete="off" />
+            </div>
+            <div>
+                <input id="unit" class="field-item w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('points-calculator.f2')} autocomplete="off"  />
+            </div>
+            <div>
+                <select id="troops" class="field-item w-full rounded-md border border-[#e0e0e0] bg-white pl-3.5 pr-8 py-3.5 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md">
+                    <option selected>{t('points-calculator.f3')}</option>
+                    <option value="1100">1100</option>
+                    <option value="1200">1200</option>
+                    <option value="1300">1300</option>
+                    <option value="1400">1400</option>
+                    <option value="1600">1600</option>
+                </select>
+            </div>
+            <div>
+                <input id="hours" class="field-item w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('points-calculator.f4')} autocomplete="off"  />
+            </div>
+        </div>
+        <div class="mt-5">
+            <div class="text-left"><span class="mr-2">{t('points-calculator.r1')}:</span><span id="unitsResult">0</span></div>
+            <div class="text-left mt-2"><span class="mr-2">{t('points-calculator.r2')}:</span><span id="hoursResult">0</span></div>
+            <div class="text-left mt-2"><span class="mr-2">{t('points-calculator.r3')}:</span><span id="daysResult">0</span></div>
+        </div>
+    </section>
+</PageLayout>
+<script transition:persist>
+    let fields = document.querySelectorAll(".field-item");
+    let inputs = document.querySelectorAll("input[type='text']");
+
+    function digits(e){
+        let val = this.value.replace(/[^0-9]/g, '');
+        val = val.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        this.value = val;
+    }
+
+    inputs.forEach((e) => {
+        e.addEventListener("input", digits);
+    });
+
+    fields.forEach((e) => {
+        e.addEventListener("input", calculate);
+    });
+
+    function getSelectedValue(e) {
+        return e.options[e.selectedIndex].value;
+    }
+
+    function calculate() {
+        let points = document.getElementById("points").value.replace(/\s+/g, '');
+        let unit = document.getElementById("unit").value;
+        let troops = getSelectedValue(document.getElementById("troops"));
+        let hours = document.getElementById("hours").value;
+        let unitsResult = document.getElementById('unitsResult');
+        let hoursResult = document.getElementById('hoursResult');
+        let daysResult = document.getElementById('daysResult');
+        let ur = Math.floor(points / unit);
+        let hr = Math.floor((ur / troops) * hours);
+        unitsResult.textContent = ur.toLocaleString();
+        hoursResult.textContent = hr.toLocaleString();
+        daysResult.textContent = timeConverter(Math.floor(hr * 60));
+    }
+
+    function timeConverter(minutes) {
+        return `${Math.floor(minutes / 24 / 60)}`;
+        //return `${Math.floor(minutes / 24 / 60)} дней ${Math.floor((minutes / 60) % 24)} часов ${Math.floor(minutes % 60)} минут`;
+    }
+</script>

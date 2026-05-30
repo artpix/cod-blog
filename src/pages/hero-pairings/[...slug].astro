@@ -1,0 +1,123 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { getAssetURL } from "../../lib/directus";
+import { rewriteLegacyCmsHtml } from "../../lib/rewriteLegacyCmsHtml";
+import { getHeroPairings } from "../../lib/api";
+import type { HeroPairingPageData } from "../../lib/directus-collections.d";
+
+export const prerender = true;
+
+// Генерация путей (SSG)
+export async function getStaticPaths() {
+    const heroPairings = await getHeroPairings();
+    return heroPairings.map((pairing) => ({
+        params: { slug: pairing.slug },
+        props: pairing,
+    }));
+}
+const pairing = Astro.props as unknown as HeroPairingPageData;
+const { title, description, body, hero_1, hero_2, screenshots, date_created, date_updated } = pairing;
+---
+<PageLayout title={title} description={description}>
+    <!-- Пост -->
+    <section class="section">
+        <div class="lg:flex gap-5">
+            <div class="w-full">
+                <article id="post" class="post">
+                    <div class="prose">
+                        <div class="">
+                            <div>
+                                <div class="flex justify-center relative mb-4">
+                                    <img
+                                            src={getAssetURL(hero_1?.avatar)}
+                                            alt={hero_1.name}
+                                            width="150"
+                                            height="150"
+                                            class="rounded-lg z-10 relative"
+                                    />
+                                    <img
+                                            src={getAssetURL(hero_2?.avatar)}
+                                            alt={hero_2.name}
+                                            width="150"
+                                            height="150"
+                                            class="-ml-6 rounded-lg z-0 relative"
+                                    />
+                                </div>
+                            </div>
+                            <div class="date text-sm text-gray-500 mb-2 text-center">
+                                <!-- Здесь можно вставить формат даты -->
+                                <FormattedDate date={date_created} />
+                                {
+                                    date_updated && (
+                                                <div class="last-updated-on">
+                                                    Обновлено:{" "}
+                                                    <FormattedDate date={date_updated} />
+                                                </div>
+                                    )
+                                }
+                            </div>
+                            <h1 class="text-center">{title}</h1>
+                            <hr class="my-4" />
+                        </div>
+                        <section class="w-full mx-auto my-6">
+                            <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                                {screenshots?.map((screenshot) => (
+                                        <div class="w-full overflow-hidden rounded-lg shadow">
+                                            <img
+                                                    src={getAssetURL(screenshot.directus_files_id)}
+                                                    alt={hero_1.name}
+                                                    class="zoomable w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105"
+                                                    loading="lazy"
+                                            />
+                                        </div>
+                                ))}
+                            </div>
+                        </section>
+                        <div class="content" set:html={rewriteLegacyCmsHtml(body)}></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    <dialog id="image-dialog" class="backdrop:bg-black/80 p-0 border-0 max-w-4xl w-full rounded">
+        <button class="absolute top-2 right-2 text-white text-3xl z-50" onclick="document.getElementById('image-dialog').close()">
+            &times;
+        </button>
+        <img id="dialog-image" src="" alt="Full" class="w-full h-auto rounded" />
+    </dialog>
+</PageLayout>
+<script>
+    const initZoom = () => {
+        const dialog = document.getElementById("image-dialog") as HTMLDialogElement | null;
+        const full = document.getElementById("dialog-image") as HTMLImageElement | null;
+
+        if (!dialog || !full) return;
+
+        document.querySelectorAll("img.zoomable").forEach((el) => {
+            const img = el as HTMLImageElement;
+            if (img.dataset.zoomInitialized) return;
+            img.style.cursor = "zoom-in";
+            img.dataset.zoomInitialized = "true";
+
+            img.addEventListener("click", () => {
+                full.src = img.src;
+                dialog.showModal();
+            });
+        });
+
+        dialog.addEventListener("click", (e) => {
+            if (e.target === dialog) dialog.close();
+        });
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") dialog.close();
+        });
+    };
+
+    // Astro навигация
+    if (window) {
+        initZoom(); // на первой загрузке
+        window.addEventListener("astro:after-swap", initZoom); // после перехода
+    }
+</script>

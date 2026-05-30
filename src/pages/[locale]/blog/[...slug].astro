@@ -1,0 +1,110 @@
+---
+// pages/[locale]/blog/[...slug].astro
+import { getPosts } from "../../../lib/api";
+import PageLayout from "../../../layouts/PageLayout.astro";
+import {getAssetURL} from "../../../lib/directus";
+import { rewriteLegacyCmsHtml } from "../../../lib/rewriteLegacyCmsHtml";
+import FormattedDate from "../../../components/FormattedDate.astro";
+import CardPost from "../../../components/CardPost.astro";
+import {useTranslations} from "../../../i18n/utils";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const locales = ['en', 'de'];
+    const allPosts = (
+        await Promise.all(locales.map((lang) => getPosts(lang)))
+    ).flat();
+
+    return allPosts.map(post => ({
+        params: {
+            slug: post.slug,
+            locale: post.lang
+        },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { lang, title, description, image, body, date_created, date_updated } = post;
+const t = useTranslations(lang);
+---
+<PageLayout title={title} description={description} showAds={true}>
+    <!-- Пост -->
+    <section class="section">
+        <div class="lg:flex gap-5">
+            <div class="w-full">
+                <article id="post" class="post">
+                    <div class="hero-image">
+                        {
+                            image && (
+                                        <img class='my-5' src={getAssetURL(image)} alt={description} width={1020} height={510} />
+                            )
+                        }
+                    </div>
+                    <div class="prose">
+                        <div class="heading mb-4">
+                            <div class="date text-sm text-gray-500 mb-2">
+                                <!-- Здесь можно вставить формат даты -->
+                                <FormattedDate date={date_created} />
+                                {
+                                    date_updated && (
+                                                <div class="last-updated-on">
+                                                    {t('default.updated')}:{" "}
+                                                    <FormattedDate date={date_updated} />
+                                                </div>
+                                    )
+                                }
+                            </div>
+                            <h1>{title}</h1>
+                            <hr class="my-4" />
+                        </div>
+                        <div class="content" set:html={rewriteLegacyCmsHtml(body)}></div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        {post.related_posts?.length > 0 && (
+                <section class="posts">
+                    <h4 class="mb-0">{t('post.related-posts')}</h4>
+                    <hr class="mb-4" />
+                    <ul class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
+                        {post.related_posts.map((relatedPost) => {
+                            const rp = relatedPost.related_posts_id;
+                            if (!rp) return null;
+                            const trs = rp.translations ?? [];
+                            const tPost =
+                                trs.find((x) => x.languages_code?.startsWith(lang)) ||
+                                trs.find((x) => x.languages_code?.startsWith('ru')) || // fallback
+                                trs[0];
+
+                            if (!tPost) return null;
+
+                            return (
+                                    <CardPost
+                                            key={rp.id}
+                                            id={rp.id}
+                                            lang={lang}
+                                            slug={rp.slug}
+                                            image={rp.image}
+                                            title={tPost.title}
+                                            date_created={rp.date_created}
+                                            tags={false}
+                                    />
+                            );
+                        })}
+                    </ul>
+                </section>
+        )}
+    </section>
+</PageLayout>
+<script is:client>
+    const slug = window.location.pathname.split('/').filter(Boolean).pop();
+
+    fetch(`/api/views/${slug}`)
+        .then((res) => res.json())
+        .then((data) => {
+            // optionally log or show something
+            console.log("Views updated");
+        });
+</script>

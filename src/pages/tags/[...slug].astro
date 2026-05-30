@@ -1,0 +1,36 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import CardPost from "../../components/CardPost.astro";
+import {getPostsByTag, getTags} from "../../lib/api";
+import { rewriteLegacyCmsHtml } from "../../lib/rewriteLegacyCmsHtml";
+
+const tagSlug = Astro.params.slug;
+const tag = (await getTags())?.find(({ slug }) =>  slug === tagSlug);
+const posts = await getPostsByTag(tagSlug);
+---
+<PageLayout title={tag.name} description={tag.description}>
+    <section>
+        <div class="prose mb-6">
+            <div class="title">
+                <h1>{tag.name}</h1>
+            </div>
+            <div class="content text-sm" set:html={rewriteLegacyCmsHtml(tag.body)}></div>
+        </div>
+        <section class="posts">
+            <ul class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
+                {posts?.map((post) => {
+                    return (
+                            <CardPost
+                                    id={post.id}
+                                    slug={post.slug}
+                                    image={post.image}
+                                    title={post.title}
+                                    date_created={post.date_created}
+                                    tags={post.tags}
+                            />
+                    );
+                })}
+            </ul>
+        </section>
+    </section>
+</PageLayout>

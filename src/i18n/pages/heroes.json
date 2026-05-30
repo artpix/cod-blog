@@ -1,0 +1,44 @@
+{
+  "ru": {
+    "title": "Герои Call of Dragons",
+    "description": "Фильтрация героев по классу, тиру и фракции",
+    "h1": "Герои в Call of Dragons — фракции, роли и специализации",
+    "paragraphs": [
+      "В Call of Dragons представлено множество уникальных героев, каждый из которых принадлежит к определённой фракции и обладает своей боевой специализацией...",
+      "Все герои делятся по:"
+    ],
+    "list": [
+      "Фракциям — Лига Порядка, Стражи Источника, Дикий Стан",
+      "Типу войск — пехота, кавалерия, лучники, магия ...",
+      "Назначению — PvP, PvE, поддержка, контроль, танк, гарнизон ..."
+    ]
+  },
+  "de": {
+    "title": "Helden in Call of Dragons",
+    "description": "Filterung der Helden nach Klasse, Tier und Fraktion",
+    "h1": "Helden in Call of Dragons — Fraktionen, Rollen und Spezialisierungen",
+    "paragraphs": [
+      "In Call of Dragons gibt es viele einzigartige Helden, von denen jeder einer bestimmten Fraktion angehört...",
+      "Alle Helden lassen sich unterteilen nach:"
+    ],
+    "list": [
+      "Fraktionen — Liga der Ordnung, Wächter der Quelle, Wilder Stamm",
+      "Truppentyp — Infanterie, Kavallerie, Bogenschützen, Magie ...",
+      "Verwendung — PvP, PvE, Unterstützung, Kontrolle, Tank, Garnison ..."
+    ]
+  },
+  "en": {
+    "title": "Heroes in Call of Dragons",
+    "description": "Filter heroes by class, tier, and faction",
+    "h1": "Heroes in Call of Dragons — Factions, Roles, and Specializations",
+    "paragraphs": [
+      "Call of Dragons features many unique heroes, each belonging to a specific faction...",
+      "All heroes can be categorized by:"
+    ],
+    "list": [
+      "Factions — League of Order, Springwardens, Wilderburg",
+      "Troop Type — Infantry, Cavalry, Archers, Magic ...",
+      "Usage — PvP, PvE, Support, Control, Tank, Garrison ..."
+    ]
+  }
+}

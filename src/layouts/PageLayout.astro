@@ -1,0 +1,30 @@
+---
+import '../styles/global.css';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+const locale = getLangFromUrl(Astro.url);
+
+export interface Props {
+    lang?: string;
+    title?: string;
+    description?: string;
+    noindex?: boolean;
+    showAds?: boolean;
+}
+const { lang = locale, title, description, noindex = false, showAds= false } = Astro.props as Props;
+---
+
+<html lang={lang}>
+<BaseHead title={title} description={description} noindex={noindex} showAds={showAds} locale={locale} />
+<body>
+<div>
+    <Header locale={locale} />
+    <main id="main" class="container mx-auto px-4 mt-5 mb-20">
+        <slot />
+    </main>
+    <Footer locale={locale} />
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import {getArtifacts} from "../lib/api";
+import ArtifactFilter from "src/components/ArtifactFilter";
+import { getAssetURL } from "../lib/directus";
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { defaultLang } from "../i18n/ui";
+import seoData from '../i18n/pages/artifacts.json';
+
+const lang = getLangFromUrl(Astro.url) || defaultLang;
+const allArtifacts = await getArtifacts();
+
+const artifacts = allArtifacts.map((a) => ({
+    ...a,
+    image_url: getAssetURL(a.image),
+}));
+const copy = seoData[lang] ?? seoData['ru'];
+---
+
+<PageLayout title={copy.title} description={copy.description}>
+    <section class="max-w-7xl mx-auto">
+        <ArtifactFilter client:load artifacts={artifacts} lang={lang} />
+    </section>
+    <!-- SEO-текст -->
+    <section class="content-text text-sm mt-10">
+        <h1 class="text-xl">{copy.h1}</h1>
+        {copy.paragraphs.map((p) => <p>{p}</p>)}
+    </section>
+</PageLayout>

@@ -1,0 +1,36 @@
+---
+// pages/[locale]/heroes.astro
+import PageLayout from "../layouts/PageLayout.astro";
+import HeroFilter from "../components/HeroFilter.jsx";
+import { getHeroes } from "../lib/api";
+import { getAssetURL } from "../lib/directus";
+import { getLangFromUrl } from '../i18n/utils';
+import { defaultLang } from "../i18n/ui";
+import seoData from '../i18n/pages/heroes.json';
+
+const lang = getLangFromUrl(Astro.url) || defaultLang;
+const allHeroes = await getHeroes(lang);
+const heroes = allHeroes.map((h) => ({
+    ...h,
+    avatar_url: getAssetURL(h.avatar),
+    faction_url: getAssetURL(h.faction?.emblem),
+}));
+
+// Данные из /i18n/pages/heroes.json
+const copy = seoData[lang] ?? seoData['ru'];
+---
+
+<PageLayout title={copy.title} description={copy.description}>
+    <section class="max-w-7xl mx-auto">
+        <HeroFilter client:load heroes={heroes} lang={lang} />
+    </section>
+
+    <!-- SEO-текст -->
+    <section class="content-text text-sm mt-10">
+        <h1 class="text-xl">{copy.h1}</h1>
+        {copy.paragraphs.map((p) => <p>{p}</p>)}
+        <ul>
+            {copy.list.map((item) => <li><strong>{item}</strong></li>)}
+        </ul>
+    </section>
+</PageLayout>

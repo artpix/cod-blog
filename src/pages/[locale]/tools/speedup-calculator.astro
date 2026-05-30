@@ -1,0 +1,100 @@
+---
+import PageLayout from "../../../layouts/PageLayout.astro";
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+import { defaultLang } from "../../../i18n/ui";
+import {getSiteCopy} from "../../../i18n/site";
+
+const lang = getLangFromUrl(Astro.url) || defaultLang;
+const copy = getSiteCopy(lang);
+const t = useTranslations(lang);
+---
+<PageLayout title={t('speedup-calculator.title')} description={copy.description}>
+    <!-- Калькулятор ускорений -->
+    <section id="speedup-calculator" class="calculator">
+        <div class="title mb-8">
+            <h1>{t('speedup-calculator.title')}</h1>
+        </div>
+        <div id="speedup" class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-3">
+            <div class="time-item">
+                <input id="m1" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.1m')}} autocomplete="off" />
+            </div>
+            <div class="time-item">
+                <input id="m5" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.5m')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="m10" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.10m')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="m15" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.15m')}}autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="m30" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.30m')}}autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="h1" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.1h')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="h3" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.3h')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="h8" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.8h')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="h15" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.15h')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="h24" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.24h')}}autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="d3" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.3d')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="d7" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.7d')}} autocomplete="off"  />
+            </div>
+            <div class="time-item">
+                <input id="d30" class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#D4220F] focus:shadow-md" type="number" placeholder={t('speedup-calculator.30d')}} autocomplete="off"  />
+            </div>
+        </div>
+        <div class="mt-5">
+            <p id="timeResult" class="text-center">0 {t('speedup-calculator.m')} 0 {t('speedup-calculator.h')} 0 {t('speedup-calculator.m')}</p>
+        </div>
+    </section>
+</PageLayout>
+<script transition:persist>
+    let inputs = document.querySelectorAll("#speedup-calculator input[type='number']");
+
+    inputs.forEach((e) => {
+        e.addEventListener("input", calculate);
+    });
+
+    function calculate() {
+        const keyValues = {
+            m1: 1,
+            m5: 5,
+            m10: 10,
+            m15: 15,
+            m30: 30,
+            h1: 60,
+            h3: 180,
+            h8: 480,
+            h15: 900,
+            h24: 1440,
+            d3: 4320,
+            d7: 10080,
+            d30: 43200
+        };
+        let sum = 0;
+        for (let key in keyValues) {
+            let item = document.getElementById(key);
+            if (item && item.value) {
+                sum += (item.value * keyValues[key]) || 0
+            }
+        }
+        let outputTextField = document.getElementById('timeResult');
+        outputTextField.textContent = timeConverter(sum);
+    }
+
+    function timeConverter(minutes) {
+        return `${Math.floor(minutes / 24 / 60)} дней ${Math.floor((minutes / 60) % 24)} часов ${Math.floor(minutes % 60)} минут`;
+    }
+</script>

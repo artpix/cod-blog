@@ -1,0 +1,23 @@
+---
+// src/pages/index.astro
+
+import PageLayout from "../layouts/PageLayout.astro";
+import PostTagFilter from "../components/PostTagFilter.jsx";
+import { getPosts, getTags } from "../lib/api";
+import { getAssetURL } from "../lib/directus";
+import { getSiteCopy } from "../i18n/site";
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+
+export const prerender = true;
+const tags = (await getTags()).filter(tag => tag.lang === lang);
+const copy = getSiteCopy(lang);
+
+const posts = (await getPosts(lang)).map(p => ({
+    ...p,
+    image_url: p.image ? getAssetURL(p.image) : null,
+}));
+---
+<PageLayout title={copy.title} description={copy.description}>
+    <PostTagFilter client:load posts={posts} tags={tags} locale={lang} />
+</PageLayout>

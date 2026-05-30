@@ -1,0 +1,59 @@
+---
+// pages/[...slug].astro
+import PageLayout from "../layouts/PageLayout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import HeroesTierList from "../components/HeroesTierList.astro";
+import {getAssetURL} from "../lib/directus";
+import {getPages} from "../lib/api";
+import { rewriteLegacyCmsHtml } from "../lib/rewriteLegacyCmsHtml";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const pages = await getPages();
+    return pages
+        .filter(p => p.lang === 'ru') // ← только русские страницы
+        .map(page => ({
+            params: {
+                slug: page.slug, // ← ОБЯЗАТЕЛЬНО массив
+            },
+            props: page,
+        }));
+}
+const page = Astro.props;
+const { title, slug, lang, image, description, body, date_created, date_updated } = page;
+---
+<PageLayout title={title} description={description}>
+    <!-- Page -->
+    <section class="section">
+        <div class="post">
+            <div class="hero-image">
+                {
+                    image && (
+                                <img src={getAssetURL(image)} alt={description} width={1020} height={510} />
+                    )
+                }
+            </div>
+            <div class="prose">
+                <div class="heading">
+                    <div class="date text-sm text-gray-500 mb-2">
+                        <!-- Здесь можно вставить формат даты -->
+                        <FormattedDate date={date_created} />
+                        {
+                            date_updated && (
+                                        <div class="last-updated-on">
+                                            Обновлено:{" "}
+                                            <FormattedDate date={date_updated} />
+                                        </div>
+                            )
+                        }
+                    </div>
+                    <h1>{title}</h1>
+                    <hr />
+                </div>
+                <div class="content" set:html={rewriteLegacyCmsHtml(body)}></div>
+                {slug === 'heroes-tier-list' && <HeroesTierList />}
+            </div>
+        </div>
+    </section>
+</PageLayout>

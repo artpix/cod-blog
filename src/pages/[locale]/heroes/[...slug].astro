@@ -1,0 +1,102 @@
+---
+// pages/[locale]/heroes/[...slug].astro
+import PageLayout from "../../../layouts/PageLayout.astro";
+import CardPost from "../../../components/CardPost.astro";
+import {getHeroes, getPostsByHero} from "../../../lib/api";
+import type { HeroCollection as Hero } from "../../../lib/directus-collections.d";
+import {getAssetURL} from "../../../lib/directus";
+import { rewriteLegacyCmsHtml } from "../../../lib/rewriteLegacyCmsHtml";
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+
+export const prerender = true;
+const lang = getLangFromUrl(Astro.url);
+
+// Генерация путей (SSG)
+export async function getStaticPaths() {
+    const locales = ["en", "de"];
+    const all = await Promise.all(locales.map((l) => getHeroes(l)));
+
+    return all.flatMap((heroes, i) =>
+        heroes.map((hero) => ({
+            params: {
+                locale: locales[i],   // обязательный параметр
+                slug: hero.slug,      // один сегмент
+            },
+            props: { ...hero, locale: locales[i] },
+        }))
+    );
+}
+
+const hero = Astro.props as unknown as Hero;
+const { name, slogan, slug, avatar, description } = hero;
+const posts = await getPostsByHero(slug, lang);
+const t = useTranslations(lang);
+---
+<PageLayout title={name} description={description}>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-info">
+            <div class="flex">
+                <div class="w-150" style="position: relative">
+                    <span
+                            style={{
+                                position: "absolute",
+                                width: "50px",
+                                height: "51px",
+                                backgroundImage: `url(${getAssetURL(hero.faction.emblem)})`,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                left: 0,
+                                top: '0',
+                            }}
+                    ></span>
+                    <div class="hero-thumbnail">
+                        <img src={getAssetURL(avatar)} alt={hero.name} width={150} height={150} />
+                    </div>
+                </div>
+                <div class="w-auto pl-5">
+                    <div class="hero-heading mt-10">
+                        <p class="slogan mb-0 pb-0">{slogan}</p>
+                        <h1>{name}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 hero-talents">
+                {hero?.trees
+                    ?.slice()                                  /* делаем копию, чтобы не мутировать props */
+                    .sort(
+                        (a, b) =>
+                            (a.talent_trees_id?.position ?? 0) -
+                            (b.talent_trees_id?.position ?? 0)     /* undefined → 0, чтобы сортировка не падала */
+                    )
+                    .map((e) => (
+                            <span class="hero-talent-item">
+                                {t(`talent.${e.talent_trees_id?.value}`)}
+                            </span>
+                    ))}
+            </div>
+        </div>
+        <div class="prose mt-5">
+            <div class="content" set:html={rewriteLegacyCmsHtml(hero.body)}></div>
+        </div>
+        {posts.length > 0 && (
+                <section class="posts">
+                    <h4 class="mb-0">{t('post.related-posts')}</h4>
+                    <hr class="mb-4">
+                    <ul class="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
+                        {posts.map((post) => (
+                                <CardPost
+                                        id={post.id}
+                                        lang={post.lang}
+                                        slug={post.slug}
+                                        image={post.image}
+                                        title={post.title}
+                                        date_created={post.date_created}
+                                        tags={false}
+                                />
+                        ))}
+                    </ul>
+                </section>
+        )}
+    </section>
+</PageLayout>

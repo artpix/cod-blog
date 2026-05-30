@@ -1,0 +1,92 @@
+---
+import {getHeroesTierList, getHeroes} from "../lib/api";
+import {getAssetURL} from "../lib/directus";
+import { getLangFromUrl } from '../i18n/utils';
+import { defaultLang } from "../i18n/ui";
+
+const lang = getLangFromUrl(Astro.url) || defaultLang;
+
+const heroesTierList = await getHeroesTierList();
+const heroes = await getHeroes();
+const sortedHeroes = heroes.sort((a, b) => {
+    // Если дата равна — сортируем по тиру
+    const tierA = a.tier_list?.position ?? 99;
+    const tierB = b.tier_list?.position ?? 99;
+    return tierA - tierB; // по возрастанию тира (S+ первыми)
+});
+---
+<div>
+    <section class="mb-5">
+        <h3><strong>Система уровней и оценки героев Call of Dragons</strong></h3>
+        <div class="container mx-auto">
+            <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                <div class="w-full overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                        <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 border-b border-gray-600">
+                            <th class="px-4 py-3"><strong>Уровень</strong></th>
+                            <th class="px-4 py-3"><strong>Описание</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        {
+                            heroesTierList.map((tier, index) => {
+                                return <tr class="text-gray-700">
+                                    <td class="px-4 py-3 border"><strong>{tier.name}</strong></td>
+                                    <td class="px-4 py-3 border">{tier.description}</td>
+                                </tr>
+                            })
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h3><strong>Таблица рейтинга героев Call of Dragons</strong></h3>
+        <div class="container mx-auto">
+            <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+                <div class="w-full overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                        <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 border-b border-gray-600">
+                            <th class="px-4 py-3 text-center">Герой</th>
+                            <th class="px-4 py-3">Тир</th>
+                            <th class="px-4 py-3">Редкость</th>
+                            <th class="px-4 py-3">Тип</th>
+                            <th class="px-4 py-3">Баф</th>
+                            <th class="px-4 py-3">Роль</th>
+                        </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                        {
+                            sortedHeroes.map((hero, index) => (
+                                    <tr class="text-gray-700">
+                                        <td class="px-4 py-3 border">
+                                            <div style="width: 50px;margin: 0 auto;">
+                                                <img src={getAssetURL(hero.avatar)} alt={hero.name} width={50} height={50} />
+                                            </div>
+                                            <div class="text-center"><a href={`/heroes/${hero.slug}/`}>{hero.name}</a></div>
+                                        </td>
+                                        <td class="px-4 py-3 border">
+                                            <strong>{hero.tier_list?.name}</strong>
+                                        </td>
+                                        <td class="px-4 py-3 border">
+                                            {hero.type?.name}
+                                        </td>
+                                        {
+                                            hero?.trees?.map((tree, index) => (
+                                                <td class="px-4 py-3 border">{tree.talent_trees_id.name}</td>
+                                            ))
+                                        }
+                                    </tr>
+                            ))
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

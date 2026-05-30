@@ -1,0 +1,115 @@
+---
+// Front-matter
+import { ViewTransitions } from 'astro:transitions';
+import YandexMetrika from '../components/YandexMetrika.astro';
+import AdSenseScript from './AdSenseScript.astro';
+import { getSiteCopy } from "../i18n/site";
+import { ogStrings } from "../i18n/ui";
+
+interface Props {
+    title: string;
+    description: string;
+    image?: string;
+    noindex?: boolean;
+    showAds?: boolean;
+    locale?: string;
+}
+
+const {
+    title,
+    description,
+    image = '/assets/images/cod_logo.png',
+    noindex = false,
+    showAds,
+    locale
+} = Astro.props;
+
+const SITE = Astro.site?.toString() ?? 'https://callofdragons.fun';
+
+// какие локали используешь (+ какой по умолчанию без префикса)
+const LOCALES = ['ru','en','de'] as const;
+const DEFAULT_LOCALE = 'ru';
+
+// 1) достаём текущий путь и определяем текущую локаль по 1-му сегменту
+const path = Astro.url.pathname.replace(/\/{2,}/g, '/');
+const segments = path.split('/').filter(Boolean);
+const first = segments[0];
+const currentLocale = LOCALES.includes(first as any) ? (first as typeof LOCALES[number]) : DEFAULT_LOCALE;
+
+// 2) получаем «базовый путь без локали»
+const basePath = currentLocale === DEFAULT_LOCALE
+    ? `/${segments.join('/')}`
+    : `/${segments.slice(1).join('/')}`;
+
+// 3) помощник для сборки абсолютных URL под каждую локаль
+const urlFor = (l: typeof LOCALES[number]) => {
+    const p = l === DEFAULT_LOCALE ? basePath : `/${l}${basePath === '/' ? '' : basePath}`;
+    return new URL(p.replace(/\/{2,}/g, '/'), SITE).toString();
+};
+
+// 4) каноникал и альтернативы
+const canonicalURL = urlFor(currentLocale);
+const alternates = LOCALES.map((l) => ({ lang: l, href: urlFor(l) }));
+
+//const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const copy = getSiteCopy(locale);
+---
+
+<>
+    <!-- Global metadata -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <!-- Favicon / icons -->
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/icons/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/icons/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/icons/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/icons/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/icons/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192"  href="/images/icons/android-icon-192x192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Title & description -->
+    <title>{title} — {copy.logo}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalURL} />
+    {alternates.map(a => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={urlFor(DEFAULT_LOCALE)} />
+
+    <!-- Open Graph -->
+    <meta property="og:locale" content={ogStrings[locale] || "ru_RU"} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+    <!-- Preloads -->
+    <link rel="preload" href="/fonts/merriweather-cyrillic-400-normal.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="/fonts/merriweather-cyrillic-700-normal.woff" as="font" type="font/woff" crossorigin />
+
+    <!-- Extra -->
+    <link  rel="sitemap" href="/sitemap-index.xml" />
+    {showAds && <AdSenseScript />}
+    <YandexMetrika />
+    <!--<ViewTransitions />-->
+</>

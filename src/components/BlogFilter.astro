@@ -1,0 +1,16 @@
+---
+
+import { library, icon } from "@fortawesome/fontawesome-svg-core";
+import { faPaw } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faPaw);
+
+const paw = icon({ prefix: "fas", iconName: faPaw.iconName });
+const tags = [];
+
+const {tag} = Astro.props
+const {slug, name} = tag;
+---
+<button data-type={`${slug}`} class="bg-gray-200 hover:bg-gray-500 text-gray-800 font-semibold hover:text-white px-3 border hover:border-transparent tags-button blog-filter">
+    <span class="">{name}</span>
+</button>
