@@ -1,22 +1,19 @@
 // astro.config.mjs
 import {defineConfig} from "astro/config";
 import tailwind from '@astrojs/tailwind';
-import node from '@astrojs/node';
+import netlify from '@astrojs/netlify';
 import * as path from "node:path";
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 
 export default defineConfig({
-    site: 'https://callofdragons.fun',
+    site: 'https://callofdragons.netlify.app',
     output: 'server',
-    adapter: node({
-        mode: 'standalone',
-    }),
+    adapter: netlify(),
     viewTransitions: true,
     integrations: [sitemap({
         filter: (page) =>
-            page !== 'https://cms.callofdragons.fun/' &&
-            page !== 'https://cms.callofdragons.online/',
+            page !== 'https://cms.callofdragons.fun/'
     }), tailwind(), react()],
     i18n: {
         defaultLocale: "ru",
