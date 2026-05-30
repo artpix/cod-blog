@@ -1,10 +1,7 @@
 import { createDirectus, rest, staticToken, type DirectusClient, type RestClient } from '@directus/sdk';
 import type { DirectusCollections } from './directus-collections';
 
-export function getAssetURL(id: any) {
-    if (!id) return '';
-    return `/assets/${id}`;
-}
+export { getAssetURL } from './assets';
 
 const API_URL = import.meta.env.DIRECTUS_URL;
 const API_TOKEN = import.meta.env.DIRECTUS_TOKEN;

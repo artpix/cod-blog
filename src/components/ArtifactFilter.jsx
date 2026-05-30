@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from '../i18n/utils';
+import { getAssetURL } from '../lib/assets';
 
 export default function ArtifactFilter({ artifacts, lang }) {
     const [filtered, setFiltered] = useState(artifacts);
@@ -67,7 +68,7 @@ export default function ArtifactFilter({ artifacts, lang }) {
                         <article className="article-card">
                             <div className="block p-4 text-center">
                                 <img
-                                    src={`/assets/${artifact.image}`}
+                                    src={getAssetURL(artifact.image)}
                                     alt={artifact.name}
                                     className="h-[160px] object-cover mx-auto mb-2 rounded"
                                 />

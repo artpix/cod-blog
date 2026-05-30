@@ -27,10 +27,8 @@ export default defineConfig({
     vite: {
         server: {
             proxy: {
-                // всё, что начинается с /assets,
-                // пересылать на Directus, который крутится локально
-                '/assets': 'http://localhost:8055'
-            }
+                '/assets': process.env.DIRECTUS_URL || 'https://cms.callofdragons.fun',
+            },
         },
         resolve: {
             alias: {

@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useTranslations } from '../i18n/utils';
+import { getAssetURL } from '../lib/assets';
 
 function hrefForPairing(p, lang) {
     // всегда от корня сайта
@@ -79,12 +80,12 @@ export default function HeroPairingsFilter({ heroPairings, lang }) {
                         <a href={hrefForPairing(pairing, lang)} className="block p-4">
                             <div className="flex justify-center relative mb-4">
                                 <img
-                                    src={`/assets/${pairing.hero_1.avatar}`}
+                                    src={getAssetURL(pairing.hero_1.avatar)}
                                     alt={pairing.hero_1.name}
                                     className="rounded-lg z-10 relative w-20 h-20 object-cover"
                                 />
                                 <img
-                                    src={`/assets/${pairing.hero_2.avatar}`}
+                                    src={getAssetURL(pairing.hero_2.avatar)}
                                     alt={pairing.hero_2.name}
                                     className="rounded-lg z-0 relative -ml-6 w-20 h-20 object-cover"
                                 />
