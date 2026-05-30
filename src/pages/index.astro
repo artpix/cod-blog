@@ -18,6 +18,6 @@ const posts = (await getPosts(lang)).map(p => ({
     image_url: p.image ? getAssetURL(p.image) : null,
 }));
 ---
-<PageLayout title={copy.title} description={copy.description}>
+<PageLayout title={copy.title} description={copy.description} showAds={true}>
     <PostTagFilter client:load posts={posts} tags={tags} locale={lang} />
 </PageLayout>
