@@ -10,8 +10,14 @@ export default defineConfig({
     output: 'static',
     viewTransitions: true,
     integrations: [sitemap({
-        filter: (page) =>
-            page !== 'https://cms.callofdragons.fun/'
+        filter: (page) => {
+            if (page === 'https://cms.callofdragons.fun/') return false;
+            try {
+                return !/\/privacy-policy\/?$/.test(new URL(page).pathname);
+            } catch {
+                return true;
+            }
+        },
     }), tailwind(), react()],
     i18n: {
         defaultLocale: "ru",

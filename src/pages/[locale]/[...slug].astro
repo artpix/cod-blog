@@ -26,8 +26,9 @@ export async function getStaticPaths() {
 const page = Astro.props;
 const { lang, title, slug, image, description, body, date_created, date_updated } = page;
 const t = useTranslations(lang);
+const noindex = slug === 'privacy-policy';
 ---
-<PageLayout title={title} description={description}>
+<PageLayout title={title} description={description} noindex={noindex}>
     <!-- Page -->
     <section class="section">
         <div class="post">
