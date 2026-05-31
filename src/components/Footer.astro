@@ -19,9 +19,9 @@ function pageHref(slug: string) {
 
 <footer id="footer" class="footer">
     <p class="site-info">{copy.description}</p>
-    <nav class="footer-legal" aria-label={`${copy.imprint}, ${copy.privacyPolicy}`}>
-        <a href={pageHref('imprint')}>{copy.imprint}</a>
+    <p class="site-copy">
+        &copy; {today.getFullYear()} Call of Dragons Fun. {copy.subtitle}
+        <span class="site-copy__sep" aria-hidden="true">·</span>
         <a href={pageHref('privacy-policy')}>{copy.privacyPolicy}</a>
-    </nav>
-    <p class="site-copy">&copy; {today.getFullYear()} Call of Dragons Fun. {copy.subtitle}</p>
+    </p>
 </footer>
