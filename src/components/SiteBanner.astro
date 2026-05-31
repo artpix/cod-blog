@@ -1,0 +1,15 @@
+---
+import { getSiteCopy } from '../i18n/site';
+
+interface Props {
+    locale: string;
+    message?: string;
+}
+
+const { locale, message } = Astro.props;
+const text = message ?? getSiteCopy(locale).banner;
+---
+
+<div class="site-banner" role="status">
+    <p class="site-banner__text">{text}</p>
+</div>

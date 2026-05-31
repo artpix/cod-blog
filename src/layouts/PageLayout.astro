@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
+import SiteBanner from "../components/SiteBanner.astro";
 import Footer from "../components/Footer.astro";
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const locale = getLangFromUrl(Astro.url);
@@ -12,8 +13,10 @@ export interface Props {
     description?: string;
     noindex?: boolean;
     showAds?: boolean;
+    showBanner?: boolean;
+    bannerMessage?: string;
 }
-const { lang = locale, title, description, noindex = false, showAds= false } = Astro.props as Props;
+const { lang = locale, title, description, noindex = false, showAds = false, showBanner = false, bannerMessage } = Astro.props as Props;
 ---
 
 <html lang={lang}>
@@ -21,6 +24,7 @@ const { lang = locale, title, description, noindex = false, showAds= false } = A
 <body>
 <div>
     <Header locale={locale} />
+    {showBanner && <SiteBanner locale={locale} message={bannerMessage} />}
     <main id="main" class="container mx-auto px-4 mt-5 mb-20">
         <slot />
     </main>

@@ -237,6 +237,22 @@ hr {
 	z-index: 100;
 }
 
+.site-banner {
+	margin: 0;
+	padding: 0.75rem 1rem;
+	background-color: #16951c;
+	color: var(--white);
+	text-align: center;
+	box-shadow: 0 2px 6px rgba(22, 149, 28, 0.35);
+}
+
+.site-banner__text {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	font-weight: 700;
+}
+
 .logo {
 	display: block;
 }
