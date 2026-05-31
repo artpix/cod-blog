@@ -8,8 +8,17 @@ interface Props {
 
 const { locale, message } = Astro.props;
 const text = message ?? getSiteCopy(locale).banner;
+
+const siteHost = 'callofdragons.netlify.app';
+const urlIndex = text.indexOf(siteHost);
+const before = urlIndex === -1 ? text : text.slice(0, urlIndex);
+const after = urlIndex === -1 ? '' : text.slice(urlIndex + siteHost.length);
 ---
 
 <div class="site-banner" role="status">
-    <p class="site-banner__text">{text}</p>
+    <p class="site-banner__text">
+        {before}
+        {urlIndex !== -1 && <span class="site-banner__url">{siteHost}</span>}
+        {after}
+    </p>
 </div>
