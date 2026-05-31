@@ -1,21 +1,27 @@
 ---
-import {getSiteCopy} from "../i18n/site";
+import { getSiteCopy } from '../i18n/site';
+import { defaultLang } from '../i18n/ui';
+
+interface Props {
+    locale?: string;
+}
+
 const today = new Date();
-import { library, icon } from "@fortawesome/fontawesome-svg-core";
-import {faHeart} from '@fortawesome/free-solid-svg-icons';
-library.add(faHeart);
-//
-const DEFAULT_LOCALE = 'ru';
-const { locale = DEFAULT_LOCALE } = Astro.params;
-const prefix = locale === DEFAULT_LOCALE ? '' : `/${locale}`;
-const heartIcon = icon({ prefix: "fas", iconName: faHeart.iconName });
+const { locale = defaultLang } = Astro.props;
+const prefix = locale === defaultLang ? '' : `/${locale}`;
 const copy = getSiteCopy(locale);
+
+function pageHref(slug: string) {
+    const path = `${prefix}/${slug}`.replace(/\/{2,}/g, '/');
+    return path.startsWith('/') ? path : `/${path}`;
+}
 ---
 
 <footer id="footer" class="footer">
     <p class="site-info">{copy.description}</p>
+    <nav class="footer-legal" aria-label={`${copy.imprint}, ${copy.privacyPolicy}`}>
+        <a href={pageHref('imprint')}>{copy.imprint}</a>
+        <a href={pageHref('privacy-policy')}>{copy.privacyPolicy}</a>
+    </nav>
     <p class="site-copy">&copy; {today.getFullYear()} Call of Dragons Fun. {copy.subtitle}</p>
-    <!--<p class="site-donation">-->
-    <!--    <span class="fa-icon"><Fragment set:html={heartIcon.html} /></span>{copy.donation}-->
-    <!--</p>-->
 </footer>

@@ -9,6 +9,8 @@ type SiteCopy = {
     donation: string;
     error404: string;
     banner: string;
+    imprint: string;
+    privacyPolicy: string;
 };
 
 const base: SiteCopy = {
@@ -22,6 +24,8 @@ const base: SiteCopy = {
     error404: 'Ошибка 404',
     banner:
         'Мы переехали! Это новый адрес сайта — добавьте callofdragons.netlify.app в закладки, чтобы не потерять нас.',
+    imprint: 'Импринт',
+    privacyPolicy: 'Политика конфиденциальности',
 };
 
 // RU — как дефолт (можно переопределить что-то относительно base)
@@ -38,6 +42,8 @@ const ru: SiteCopy = {
     error404: 'Ошибка 404',
     banner:
         'Мы переехали! Это новый адрес сайта — добавьте callofdragons.netlify.app в закладки, чтобы не потерять нас.',
+    imprint: 'Импринт',
+    privacyPolicy: 'Политика конфиденциальности',
 };
 
 const de: SiteCopy = {
@@ -52,6 +58,8 @@ const de: SiteCopy = {
     error404: '404 Not Found',
     banner:
         'Wir sind umgezogen! Das ist unsere neue Adresse — speichern Sie callofdragons.netlify.app als Lesezeichen, damit Sie uns nicht verlieren.',
+    imprint: 'Impressum',
+    privacyPolicy: 'Datenschutz',
 };
 
 const en: SiteCopy = {
@@ -66,6 +74,8 @@ const en: SiteCopy = {
     error404: '404 Not Found',
     banner:
         "We've moved! This is our new address — bookmark callofdragons.netlify.app so you don't lose us.",
+    imprint: 'Imprint',
+    privacyPolicy: 'Privacy Policy',
 };
 
 export const siteCopy: Record<Locale, SiteCopy> = { ru, de, en };
