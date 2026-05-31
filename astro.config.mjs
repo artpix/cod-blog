@@ -11,9 +11,9 @@ export default defineConfig({
     viewTransitions: true,
     integrations: [sitemap({
         filter: (page) => {
-            if (page === 'https://cms.callofdragons.fun/') return false;
             try {
-                return !/\/privacy-policy\/?$/.test(new URL(page).pathname);
+                const { pathname } = new URL(page);
+                return !/\/privacy-policy\/?$/.test(pathname);
             } catch {
                 return true;
             }
@@ -33,7 +33,10 @@ export default defineConfig({
     vite: {
         server: {
             proxy: {
-                '/assets': process.env.DIRECTUS_URL || 'https://cms.callofdragons.fun',
+                '/assets': {
+                    target: process.env.DIRECTUS_URL || 'https://cod.artpix.cloud',
+                    changeOrigin: true,
+                },
             },
         },
         resolve: {

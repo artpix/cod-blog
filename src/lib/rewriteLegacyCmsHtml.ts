@@ -1,15 +1,15 @@
-const LEGACY_CMS_HOST = 'cms.callofdragons.online';
+const LEGACY_CMS_HOSTS = ['cms.callofdragons.online', 'cms.callofdragons.fun', 'cod.artpix.cloud'];
 
-const CMS_ORIGIN =
-    (import.meta.env.PUBLIC_CMS_ORIGIN as string | undefined)?.replace(/\/$/, '') ??
-    'https://cms.callofdragons.fun';
-
-/** Rewrites hard-coded asset URLs from the old CMS host in Directus HTML fields. */
+/** Rewrites hard-coded CMS asset URLs in Directus HTML fields to local /assets paths. */
 export function rewriteLegacyCmsHtml(html: string | undefined | null): string {
     if (html == null || html === '') {
         return '';
     }
-    return html
-        .replaceAll(`https://${LEGACY_CMS_HOST}`, CMS_ORIGIN)
-        .replaceAll(`http://${LEGACY_CMS_HOST}`, CMS_ORIGIN);
+    let result = html;
+    for (const host of LEGACY_CMS_HOSTS) {
+        result = result
+            .replaceAll(`https://${host}/assets/`, '/assets/')
+            .replaceAll(`http://${host}/assets/`, '/assets/');
+    }
+    return result;
 }

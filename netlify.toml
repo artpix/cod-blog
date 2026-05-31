@@ -4,4 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  PUBLIC_DIRECTUS_URL = "https://cms.callofdragons.fun"
+
+[[redirects]]
+  from = "/assets/*"
+  to = "https://cod.artpix.cloud/assets/:splat"
+  status = 200
+  force = true
