@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const CMS_URL = 'https://cod.artpix.cloud';
+const CMS_URL = 'https://cod.artpix.dev';
 const DEPRECATED_CMS_HOSTS = new Set(['cms.callofdragons.fun', 'cms.callofdragons.online']);
 
 function loadDotEnv() {

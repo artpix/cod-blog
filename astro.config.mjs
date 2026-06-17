@@ -34,7 +34,7 @@ export default defineConfig({
         server: {
             proxy: {
                 '/assets': {
-                    target: process.env.DIRECTUS_URL || 'https://cod.artpix.cloud',
+                    target: process.env.DIRECTUS_URL || 'https://cod.artpix.dev',
                     changeOrigin: true,
                 },
             },
