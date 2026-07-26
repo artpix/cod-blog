@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 
 export default defineConfig({
-    site: 'https://callofdragons.netlify.app',
+    site: 'https://codguides.com',
     output: 'static',
     viewTransitions: true,
     integrations: [sitemap({

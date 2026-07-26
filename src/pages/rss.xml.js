@@ -8,7 +8,7 @@ export async function GET() {
     return rss({
         title: SITE_TITLE,
         description: SITE_DESCRIPTION,
-        site: 'https://callofdragons.fun',
+        site: 'https://codguides.com',
         items: posts.map(post => ({
             title: post.title,
             pubDate: post.date,

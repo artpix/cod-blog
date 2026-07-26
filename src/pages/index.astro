@@ -13,11 +13,13 @@ export const prerender = true;
 const tags = (await getTags()).filter(tag => tag.lang === lang);
 const copy = getSiteCopy(lang);
 
-const posts = (await getPosts(lang)).map(p => ({
-    ...p,
-    image_url: p.image ? getAssetURL(p.image) : null,
-}));
+const posts = (await getPosts(lang))
+    .filter((p): p is NonNullable<typeof p> => p != null)
+    .map(p => ({
+        ...p,
+        image_url: p.image ? getAssetURL(p.image) : null,
+    }));
 ---
-<PageLayout title={copy.title} description={copy.description} showAds={true} showBanner={true}>
+<PageLayout title={copy.title} description={copy.description} showAds={true}>
     <PostTagFilter client:load posts={posts} tags={tags} locale={lang} />
 </PageLayout>

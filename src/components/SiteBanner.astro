@@ -9,7 +9,7 @@ interface Props {
 const { locale, message } = Astro.props;
 const text = message ?? getSiteCopy(locale).banner;
 
-const siteHost = 'callofdragons.netlify.app';
+const siteHost = 'codguides.com';
 const urlIndex = text.indexOf(siteHost);
 const before = urlIndex === -1 ? text : text.slice(0, urlIndex);
 const after = urlIndex === -1 ? '' : text.slice(urlIndex + siteHost.length);

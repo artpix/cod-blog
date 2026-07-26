@@ -18,11 +18,11 @@ const base: SiteCopy = {
     logo: 'Call of Dragons. Фан-сайт',
     subtitle: 'Гайды, новости, руководства',
     description:
-        'Callofdragons.fun — это увлекательный фан-сайт, созданный с любовью к сообществу. Здесь вы найдете всё о Call of Dragons.',
+        'Codguides.com — это увлекательный фан-сайт, созданный с любовью к сообществу. Здесь вы найдете всё о Call of Dragons.',
     donation: 'поддержать проект',
     error404: 'Ошибка 404',
     banner:
-        'Мы переехали! Это новый адрес сайта — добавьте callofdragons.netlify.app в закладки, чтобы не потерять нас.',
+        'Мы переехали! Это новый адрес сайта — добавьте codguides.com в закладки, чтобы не потерять нас.',
     privacyPolicy: 'Политика конфиденциальности',
 };
 
@@ -35,11 +35,11 @@ const ru: SiteCopy = {
     logo: 'Call of Dragons. Фан-сайт',
     subtitle: 'Гайды, новости, руководства',
     description:
-        'Callofdragons.fun — это увлекательный фан-сайт, созданный с любовью к сообществу. Здесь вы найдете все, что связано с игрой Call of Dragons от Farlight Games и LEGOU Games.',
+        'Codguides.com — это увлекательный фан-сайт, созданный с любовью к сообществу. Здесь вы найдете все, что связано с игрой Call of Dragons от Farlight Games и LEGOU Games.',
     donation: 'поддержать проект',
     error404: 'Ошибка 404',
     banner:
-        'Мы переехали! Это новый адрес сайта — добавьте callofdragons.netlify.app в закладки, чтобы не потерять нас.',
+        'Мы переехали! Это новый адрес сайта — добавьте codguides.com в закладки, чтобы не потерять нас.',
     privacyPolicy: 'Политика конфиденциальности',
 };
 
@@ -50,11 +50,11 @@ const de: SiteCopy = {
     logo: 'Call of Dragons. Fanseite',
     subtitle: 'Guides, Nachrichten, Anleitungen',
     description:
-        'Callofdragons.fun ist eine faszinierende Fanseite, die mit Liebe zur Community erstellt wurde. Hier finden Sie alles rund um das Spiel Call of Dragons von Farlight Games und Legou Games.',
+        'Codguides.com ist eine faszinierende Fanseite, die mit Liebe zur Community erstellt wurde. Hier finden Sie alles rund um das Spiel Call of Dragons von Farlight Games und Legou Games.',
     donation: 'поддержать проект',
     error404: '404 Not Found',
     banner:
-        'Wir sind umgezogen! Das ist unsere neue Adresse — speichern Sie callofdragons.netlify.app als Lesezeichen, damit Sie uns nicht verlieren.',
+        'Wir sind umgezogen! Das ist unsere neue Adresse — speichern Sie codguides.com als Lesezeichen, damit Sie uns nicht verlieren.',
     privacyPolicy: 'Datenschutz',
 };
 
@@ -65,11 +65,11 @@ const en: SiteCopy = {
     logo: 'Call of Dragons. Fansite',
     subtitle: 'Guides, news, strategies',
     description:
-        'Callofdragons.fun is an engaging fan site created with love for the community. Here you will find everything related to the game Call of Dragons by Farlight Games and Legou Games.',
+        'Codguides.com is an engaging fan site created with love for the community. Here you will find everything related to the game Call of Dragons by Farlight Games and Legou Games.',
     donation: 'поддержать проект',
     error404: '404 Not Found',
     banner:
-        "We've moved! This is our new address — bookmark callofdragons.netlify.app so you don't lose us.",
+        "We've moved! This is our new address — bookmark codguides.com so you don't lose us.",
     privacyPolicy: 'Privacy Policy',
 };
 
